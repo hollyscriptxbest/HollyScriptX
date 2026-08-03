@@ -32,11 +32,17 @@
       radial-gradient(circle at 50% 90%, rgba(255,255,255,0.05), transparent 50%),
       linear-gradient(160deg, #000000 0%, #050505 45%, #000000 100%);
     background-attachment:fixed;
+    background-size:180% 180%, 180% 180%, 180% 180%, 100% 100%;
+    animation:bgDrift 26s ease-in-out infinite;
     min-height:100vh;
     overflow-x:hidden;
   }
   .display{font-family:'Space Grotesk',sans-serif;}
   ::selection{background:#ffffff; color:#000000;}
+  @keyframes bgDrift{
+    0%,100%{ background-position:0% 0%, 100% 0%, 50% 100%, 0 0; }
+    50%{ background-position:20% 30%, 80% 20%, 40% 80%, 0 0; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
@@ -201,7 +207,10 @@
     letter-spacing:0.01em;
     position:relative;
     z-index:2;
+    display:inline-block;
+    transition:letter-spacing .3s ease, transform .3s ease;
   }
+  a.brand:hover{ letter-spacing:0.03em; transform:scale(1.03); }
   .brand span{ color:#ffffff; }
   .nav-links{display:flex; gap:28px; align-items:center; position:relative; z-index:2;}
   .nav-links a{
@@ -239,7 +248,85 @@
     font-size:0.85rem !important;
     box-shadow:0 6px 18px -6px rgba(255,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
   }
-  @media (max-width:720px){ .nav-links a:not(.nav-cta){display:none;} }
+  .nav-toggle{
+    display:none;
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    border:none;
+    background:rgba(255,255,255,0.08);
+    cursor:pointer;
+    position:relative;
+    z-index:2;
+    flex-shrink:0;
+  }
+  .nav-toggle span{
+    position:absolute;
+    left:8px; right:8px;
+    height:2px;
+    background:#ffffff;
+    border-radius:2px;
+    transition:transform .25s ease, opacity .2s ease, top .25s ease;
+  }
+  .nav-toggle span:nth-child(1){ top:12px; }
+  .nav-toggle span:nth-child(2){ top:17px; }
+  .nav-toggle span:nth-child(3){ top:22px; }
+  .nav-toggle.open span:nth-child(1){ top:17px; transform:rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ top:17px; transform:rotate(-45deg); }
+
+  .mobile-menu{
+    position:fixed;
+    top:76px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(320px, 90%);
+    z-index:49;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateX(-50%) translateY(-10px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s;
+  }
+  .mobile-menu.open{
+    opacity:1;
+    visibility:visible;
+    transform:translateX(-50%) translateY(0);
+  }
+  .mobile-menu a{
+    color:var(--text);
+    text-decoration:none;
+    font-size:0.95rem;
+    font-weight:500;
+    padding:12px 14px;
+    border-radius:10px;
+    transition:background .2s;
+    opacity:0;
+    transform:translateY(-6px);
+  }
+  .mobile-menu.open a{
+    animation:menuItemIn .35s ease forwards;
+  }
+  .mobile-menu.open a:nth-child(1){ animation-delay:.03s; }
+  .mobile-menu.open a:nth-child(2){ animation-delay:.08s; }
+  .mobile-menu.open a:nth-child(3){ animation-delay:.13s; }
+  .mobile-menu.open a:nth-child(4){ animation-delay:.18s; }
+  @keyframes menuItemIn{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .mobile-menu a:hover{ background:rgba(255,255,255,0.08); }
+
+  @media (max-width:720px){
+    .nav-links a:not(.nav-cta){display:none;}
+    .nav-toggle{ display:block; order:2; margin-left:8px; }
+    .nav-links{ gap:0; }
+  }
+  @media (min-width:721px){
+    .mobile-menu{ display:none; }
+  }
 
   /* hero */
   .hero{
@@ -509,7 +596,9 @@
     border-right:1px solid var(--glass-border);
     position:relative;
     z-index:2;
+    transition:background .25s ease, transform .25s ease;
   }
+  .stat:hover{ background:rgba(255,255,255,0.04); transform:translateY(-2px); }
   .stat:last-child{border-right:none;}
   .stat .num{
     font-family:'Space Grotesk',sans-serif;
@@ -547,6 +636,13 @@
     backdrop-filter:none;
     -webkit-backdrop-filter:none;
     background:rgba(255,255,255,0.06);
+    border:none;
+  }
+  .script-buttons .btn.glass::before,
+  .script-buttons .btn.glass::after,
+  .script-buttons .copy-btn.glass::before,
+  .script-buttons .copy-btn.glass::after{
+    display:none;
   }
   .script-buttons .copy-btn{
     border-radius:0;
@@ -576,6 +672,7 @@
   }
   .script-buttons .copy-btn.glass{
     background:rgba(255,255,255,0.14);
+    border:none;
   }
   .copy-btn:hover{ background:rgba(255,255,255,0.2); }
   .copy-btn:active{ transform:scale(0.92); }
@@ -657,6 +754,16 @@
 
   /* FAQ accordion */
   .faq-list{ margin-top:44px; display:flex; flex-direction:column; gap:14px; max-width:760px; }
+  .wrap.reveal.in .faq-item{ animation:faqIn .5s cubic-bezier(.2,.8,.2,1) backwards; }
+  .faq-list .faq-item:nth-child(1){ animation-delay:.05s; }
+  .faq-list .faq-item:nth-child(2){ animation-delay:.12s; }
+  .faq-list .faq-item:nth-child(3){ animation-delay:.19s; }
+  .faq-list .faq-item:nth-child(4){ animation-delay:.26s; }
+  .faq-list .faq-item:nth-child(5){ animation-delay:.33s; }
+  @keyframes faqIn{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
   .faq-item{ border-radius:16px; overflow:hidden; }
   .faq-q{
     width:100%;
@@ -732,8 +839,13 @@
     opacity:1;
     transform:translateY(0);
     pointer-events:auto;
+    animation:backToTopPulse 2.8s ease-in-out infinite;
   }
-  #back-to-top:hover{ transform:translateY(-3px); }
+  #back-to-top:hover{ transform:translateY(-3px); animation-play-state:paused; }
+  @keyframes backToTopPulse{
+    0%,100%{ box-shadow:0 4px 16px rgba(0,0,0,0.4); }
+    50%{ box-shadow:0 4px 16px rgba(0,0,0,0.4), 0 0 0 6px rgba(255,255,255,0.06); }
+  }
 
   .reveal{opacity:0; transform:translateY(20px); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);}
   .reveal.in{opacity:1; transform:translateY(0);}
@@ -754,8 +866,17 @@
     <a href="#faq">FAQ</a>
     <a href="#doors-script">Scripts</a>
     <a href="https://discord.gg/hsx/" class="nav-cta">Join Our Discord</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="mobile-menu glass" id="mobileMenu">
+  <a href="#features">About</a>
+  <a href="#faq">FAQ</a>
+  <a href="#doors-script">Scripts</a>
+  <a href="#key-system">Get Key</a>
+</div>
 
 <section class="hero" id="top">
   <div class="pill glass"><span class="dot"></span> <span>Now reading scripts in real time</span></div>
@@ -815,12 +936,14 @@
         <div class="card-icon">💬</div>
         <h3>Community</h3>
         <p>Script requests, key drops, and update announcements all happen in the Discord.</p>
-      
+      </div>
     </div>
-    </div>
-<div class="wrap reveal">
-<span class="eyebrow">SCRIPTS</span>        
-<h2>Get Script Here And Update!</h2>
+  </div>
+  <div class="wrap reveal">
+    <span class="eyebrow">SCRIPTS</span>
+    <h2>Get Script Here And Update!</h2>
+  </div>
+</section>
 
 <section id="ink-script">
   <div class="wrap reveal" style="text-align:center;">
@@ -845,7 +968,8 @@
       <h2 style="margin-left:auto; margin-right:auto;">Doors Script</h2>
       <div class="script-buttons">
         <a href="#key-system" class="btn btn-primary">Get Script</a>
-        <button class="copy-btn glass" type="button" data-copy=loadstring(game:HttpGet("https://raw.githubusercontent.com/saosdkjiqwdjuqjudidw/doors.lua/refs/heads/main/DoorsScripts"))() aria-label="Copy text">
+        <button class="copy-btn glass" type="button" data-copy=loadstring(game:HttpGet("https://raw.githubusercontent.com/saosdkjiqwdjuqjudidw/doors.lua/refs/heads/main/DoorsScripts"))()
+ aria-label="Copy text">
           <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2.5"></rect><path d="M5 15V5.5A2.5 2.5 0 0 1 7.5 3H15"></path></svg>
           <svg class="check-icon" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"></path></svg>
         </button>
@@ -868,10 +992,13 @@
     </div>
   </div>
 </section>
-<div class="stats glass reveal">
-<div class="stat"><div class="num display">40k+</div><div class="label">scripts read</div></div>
-      <div class="stat"><div class="num display">4K</div><div class="label">Discord Members</div></div>
-      <div class="stat"><div class="num display">99%</div><div class="label">Undetected</div></div>
+
+<section id="stats-strip">
+  <div class="wrap">
+    <div class="stats glass reveal">
+      <div class="stat"><div class="num display" data-count="40" data-suffix="k+">0</div><div class="label">scripts read</div></div>
+      <div class="stat"><div class="num display" data-count="4" data-suffix="K">0</div><div class="label">Discord Members</div></div>
+      <div class="stat"><div class="num display" data-count="99" data-suffix="%">0</div><div class="label">Undetected</div></div>
     </div>
   </div>
 </section>
@@ -930,7 +1057,7 @@
         <a href="https://ads.luarmor.net/get_key?for=HollyScriptX__Ink_Game-ltUEROLgDFTZ" class="btn btn-primary">GET KEY FOR INK GAME</a>
         <span class="script-buttons">
           <a href="#freekey" class="btn btn-glass glass">DOORS OR MM2 GET KEY</a>
-          <button class="copy-btn glass" type="button" data-copy=HSX-7562-3194-0835-4981-2470-1488-1029-6967 aria-label="Copy text">
+          <button class="copy-btn glass" type="button" data-copy="HSX-7562-3194-0835-4981-2470-1488-1029-6967" aria-label="Copy text">
             <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2.5"></rect><path d="M5 15V5.5A2.5 2.5 0 0 1 7.5 3H15"></path></svg>
             <svg class="check-icon" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"></path></svg>
           </button>
@@ -940,7 +1067,7 @@
   </div>
 </section>
 
-<footer>
+<footer class="reveal">
   <div class="footer-inner">
     <div class="footer-brand">
       <span class="brand" style="pointer-events:none;">Holly<span>Script</span>X</span>
@@ -1147,6 +1274,7 @@
     requestAnimationFrame(step);
   })();
 
+
   /* ---- 3D tilt on the preview card, following the mouse ---- */
   (function(){
     const wrap = document.getElementById('tiltWrap');
@@ -1198,6 +1326,59 @@
       setTimeout(()=> ripple.remove(), 650);
     });
   });
+
+  /* ---- Stats count-up animation ---- */
+  (function(){
+    const nums = document.querySelectorAll('.num[data-count]');
+    if(!nums.length) return;
+    const done = new WeakSet();
+    function animateNum(el){
+      if(done.has(el)) return;
+      done.add(el);
+      const target = parseFloat(el.getAttribute('data-count'));
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 1200;
+      const start = performance.now();
+      function tick(ts){
+        const p = Math.min(1, (ts - start) / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = Math.round(target * eased);
+        el.textContent = val + suffix;
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    const statsObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.querySelectorAll('.num[data-count]').forEach(animateNum);
+        }
+      });
+    }, {threshold:0.4});
+    document.querySelectorAll('.stats').forEach(el=>statsObserver.observe(el));
+  })();
+
+  /* ---- Mobile hamburger menu ---- */
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    if(!toggle || !menu) return;
+    function closeMenu(){
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('open');
+    }
+    toggle.addEventListener('click', ()=>{
+      const isOpen = menu.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e)=>{
+      if(!menu.classList.contains('open')) return;
+      if(!menu.contains(e.target) && !toggle.contains(e.target)){ closeMenu(); }
+    });
+  })();
 
   /* ---- FAQ accordion ---- */
   document.querySelectorAll('.faq-item').forEach(item=>{
