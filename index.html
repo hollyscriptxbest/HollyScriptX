@@ -107,7 +107,6 @@
     50%{ opacity:0.18; }
   }
 
-  /* glass base — simplified glass-card recipe */
   .glass{
     position:relative;
     background:rgba(0,0,0,0.4);
@@ -141,7 +140,6 @@
     z-index:-1;
   }
 
-  /* liquid-glass sparkle accents */
   .sparkle{
     position:absolute;
     width:14px;
@@ -328,7 +326,6 @@
     .mobile-menu{ display:none; }
   }
 
-  /* hero */
   .hero{
     position:relative;
     z-index:1;
@@ -475,7 +472,6 @@
     50%{ transform:translateY(-4px); }
   }
 
-  /* sections */
   section{position:relative; z-index:1; padding:24px 20px; scroll-margin-top:90px;}
   @media (max-width:720px){
     section{ padding:8px 12px; }
@@ -515,7 +511,6 @@
     max-width:58ch;
   }
 
-  /* feature grid */
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -580,7 +575,6 @@
     margin:0;
   }
 
-  /* stats strip */
   .stats{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -608,7 +602,6 @@
   }
   .stat .label{font-size:0.8rem; color:var(--text-dim); margin-top:6px;}
 
-  /* script cards */
   .quote-card{
     max-width:680px;
     margin:0 auto;
@@ -752,7 +745,6 @@
     font-size:0.82rem;
   }
 
-  /* FAQ accordion */
   .faq-list{ margin-top:44px; display:flex; flex-direction:column; gap:14px; max-width:760px; }
   .wrap.reveal.in .faq-item{ animation:faqIn .5s cubic-bezier(.2,.8,.2,1) backwards; }
   .faq-list .faq-item:nth-child(1){ animation-delay:.05s; }
@@ -1127,7 +1119,6 @@
     });
   });
 
-  /* ---- Mouse parallax for background orbs ---- */
   (function(){
     const root = document.documentElement;
     let targetX = 0, targetY = 0, curX = 0, curY = 0;
@@ -1147,7 +1138,6 @@
     loop();
   })();
 
-  /* ---- Particle network background (dots + connecting lines) ---- */
   (function(){
     const canvas = document.getElementById('bg-particles');
     if(!canvas) return;
@@ -1275,7 +1265,6 @@
   })();
 
 
-  /* ---- 3D tilt on the preview card, following the mouse ---- */
   (function(){
     const wrap = document.getElementById('tiltWrap');
     if(!wrap) return;
@@ -1295,7 +1284,6 @@
     });
   })();
 
-  /* ---- Cursor-following glow halo ---- */
   (function(){
     const glow = document.getElementById('cursor-glow');
     if(!glow) return;
@@ -1312,7 +1300,6 @@
     loop();
   })();
 
-  /* ---- Click ripple on buttons ---- */
   document.querySelectorAll('.btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
       const rect = btn.getBoundingClientRect();
@@ -1327,7 +1314,6 @@
     });
   });
 
-  /* ---- Stats count-up animation ---- */
   (function(){
     const nums = document.querySelectorAll('.num[data-count]');
     if(!nums.length) return;
@@ -1358,7 +1344,6 @@
     document.querySelectorAll('.stats').forEach(el=>statsObserver.observe(el));
   })();
 
-  /* ---- Mobile hamburger menu ---- */
   (function(){
     const toggle = document.getElementById('navToggle');
     const menu = document.getElementById('mobileMenu');
@@ -1380,7 +1365,6 @@
     });
   })();
 
-  /* ---- FAQ accordion ---- */
   document.querySelectorAll('.faq-item').forEach(item=>{
     const q = item.querySelector('.faq-q');
     q.addEventListener('click', ()=>{
@@ -1396,7 +1380,6 @@
     });
   });
 
-  /* ---- Scroll progress bar + back-to-top button ---- */
   (function(){
     const bar = document.getElementById('scroll-progress');
     const topBtn = document.getElementById('back-to-top');
